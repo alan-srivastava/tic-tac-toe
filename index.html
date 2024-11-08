@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic-Tac-Toe</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Celebration Confetti Animation */
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
+
+    .confetti div {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: orange;
+      animation: confetti-fall 2s linear infinite;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+
+    /* Game Container */
+    .game-container {
+      text-align: center;
+      position: relative;
+      padding: 20px;
+    }
+
+    .game-title {
+      font-family: Arial, sans-serif;
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 5px;
+      justify-items: center;  /* Center cells horizontally */
+      align-items: center;  /* Center cells vertically */
+      width: 300px;  /* Fixed size for the board */
+      height: 300px;  /* Fixed size for the board */
+      margin: 0 auto;  /* Center the board */
+    }
+
+    .cell {
+      width: 100%;
+      height: 100%;
+      background-color: #444;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5rem;
+      color: white;
+      border: 2px solid #222;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .cell:hover {
+      background-color: #555;
+    }
+
+    .status {
+      font-family: Arial, sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .reset-btn {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 5px;
+    }
+
+    .winner-box {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      font-size: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .winner-box p {
+      margin-bottom: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1 class="game-title">Tic-Tac-Toe</h1>
+    <div class="board">
+      <div class="cell" id="cell-0"></div>
+      <div class="cell" id="cell-1"></div>
+      <div class="cell" id="cell-2"></div>
+      <div class="cell" id="cell-3"></div>
+      <div class="cell" id="cell-4"></div>
+      <div class="cell" id="cell-5"></div>
+      <div class="cell" id="cell-6"></div>
+      <div class="cell" id="cell-7"></div>
+      <div class="cell" id="cell-8"></div>
+    </div>
+    <div class="status">
+      <p class="message">Player X's turn</p>
+      <button class="reset-btn" onclick="resetGame()">Reset Game</button>
+    </div>
+    <!-- Winner box will appear here -->
+    <div class="winner-box" id="winner-box">
+      <p id="winner-message">Player X Wins!</p>
+      <button class="reset-btn" onclick="resetGame()">Play Again</button>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div> <!-- Confetti container -->
+
+  <script>
+    // JavaScript code for handling player moves and game logic
+    const cells = document.querySelectorAll('.cell');
+    let currentPlayer = 'X';
+    let gameBoard = ['', '', '', '', '', '', '', '', '']; // Empty game board
+    const confettiContainer = document.getElementById('confetti');
+    const winnerBox = document.getElementById('winner-box');
+    const winnerMessage = document.getElementById('winner-message');
+
+    function handleClick(event) {
+      const cell = event.target;
+      const cellIndex = Array.from(cells).indexOf(cell);
+
+      // Avoid clicking on an already filled cell
+      if (gameBoard[cellIndex] !== '' || winnerBox.style.display === 'block') return;
+
+      // Mark the cell with the current player's symbol
+      gameBoard[cellIndex] = currentPlayer;
+      cell.innerText = currentPlayer;
+
+      // Switch player for next turn
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+      // Update status message
+      document.querySelector('.message').innerText = `Player ${currentPlayer}'s turn`;
+
+      // Check if there's a winner
+      checkWinner();
+    }
+
+    // Function to check for a winner
+    function checkWinner() {
+      const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical
+        [0, 4, 8], [2, 4, 6]             // Diagonal
+      ];
+
+      for (const combo of winningCombinations) {
+        const [a, b, c] = combo;
+        if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+          // Highlight the winning cells
+          cells[a].style.backgroundColor = '#2ecc71';
+          cells[b].style.backgroundColor = '#2ecc71';
+          cells[c].style.backgroundColor = '#2ecc71';
+
+          // Show the winner message and celebration
+          setTimeout(() => {
+            winnerMessage.innerText = `${gameBoard[a]} Wins! 🎉`;
+            winnerBox.style.display = 'block'; // Show winner box
+            startCelebration();
+          }, 200);
+          return;
+        }
+      }
+
+      // Check if it's a draw
+      if (!gameBoard.includes('')) {
+        setTimeout(() => {
+          winnerMessage.innerText = 'It\'s a draw!';
+          winnerBox.style.display = 'block'; // Show draw message
+        }, 200);
+      }
+    }
+
+    // Function to start the confetti celebration
+    function startCelebration() {
+      // Display confetti
+      confettiContainer.style.display = 'block';
+      const totalConfetti = 100; // Number of confetti pieces
+
+      for (let i = 0; i < totalConfetti; i++) {
+        const confettiPiece = document.createElement('div');
+        confettiPiece.style.left = `${Math.random() * 100}%`;
+        confettiPiece.style.animationDelay = `${Math.random() * 2}s`;
+        confettiPiece.style.backgroundColor = getRandomColor();
+        confettiContainer.appendChild(confettiPiece);
+      }
+
+      // Hide confetti after 5 seconds
+      setTimeout(() => {
+        confettiContainer.style.display = 'none';
+        confettiContainer.innerHTML = ''; // Clear confetti pieces
+      }, 5000);
+    }
+
+    // Function to generate random color for confetti
+    function getRandomColor() {
+      const colors = ['#ff5733', '#f39c12', '#e74c3c', '#9b59b6', '#3498db', '#2ecc71'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    // Function to reset the game
+    function resetGame() {
+      gameBoard = ['', '', '', '', '', '', '', '', ''];
+      cells.forEach(cell => {
+        cell.innerText = '';
+        cell.style.backgroundColor = '#444';
+      });
+      winnerBox.style.display = 'none';
+      document.querySelector('.message').innerText = `Player X's turn`;
+    }
+
+    // Add click event listeners to all cells
+    cells.forEach(cell => cell.addEventListener('click', handleClick));
+  </script>
+</body>
+</html>

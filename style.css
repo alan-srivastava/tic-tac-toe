@@ -1,0 +1,172 @@
+/* style.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #121212; /* Dark background */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  animation: backgroundShift 5s infinite alternate; /* Background animation for a 4D effect */
+}
+
+/* Background animation that shifts over time */
+@keyframes backgroundShift {
+  0% {
+    background-color: #121212;
+    background-image: linear-gradient(145deg, #333, #666);
+  }
+  50% {
+    background-color: #1a1a1a;
+    background-image: linear-gradient(145deg, #ff5722, #ff9100); /* Orange gradient effect */
+  }
+  100% {
+    background-color: #121212;
+    background-image: linear-gradient(145deg, #333, #666);
+  }
+}
+
+.game-container {
+  text-align: center;
+  padding: 50px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #333, #666); /* Gradient background */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8); /* Shadow to give a 3D depth effect */
+  width: 600px;
+  height: 600px;
+  position: relative;
+  animation: containerFloat 10s infinite alternate; /* Floating effect for the container */
+}
+
+@keyframes containerFloat {
+  0% {
+    transform: translateY(0) rotateY(0);
+  }
+  50% {
+    transform: translateY(-10px) rotateY(15deg);
+  }
+  100% {
+    transform: translateY(0) rotateY(0);
+  }
+}
+
+.game-title {
+  font-size: 60px;
+  margin-bottom: 40px;
+  color: #ff5722; /* Orange title color */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  animation: titleBounce 2s infinite alternate; /* Bounce animation for the title */
+}
+
+@keyframes titleBounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #888;
+  border-radius: 15px;
+  padding: 5px;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
+  animation: boardWave 3s infinite alternate; /* Animation for a wave-like effect */
+}
+
+@keyframes boardWave {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.cell {
+  background-color: #444;
+  border: 2px solid #ff5722; /* Orange border for each cell */
+  font-size: 70px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #ddd;
+  border-radius: 12px;
+  height: 100%;
+  width: 100%;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+  animation: cellPulse 1.5s infinite alternate; /* Pulsing effect for cells */
+}
+
+@keyframes cellPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.cell:hover {
+  background-color: #ff5722; /* Hover color change to orange */
+  color: #fff; /* Text color change to white on hover */
+  transform: scale(1.2) translateY(-5px); /* Scale and lift effect */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+.cell.X {
+  color: #e74c3c;
+}
+
+.cell.O {
+  color: #3498db;
+}
+
+.status {
+  margin-top: 30px;
+}
+
+.message {
+  font-size: 24px;
+  color: #bbb;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.reset-btn {
+  padding: 18px 35px;
+  background-color: #ff5722; /* Orange button color */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-top: 20px;
+}
+
+.reset-btn:hover {
+  background-color: #ff9100; /* Lighter orange when hovering */
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
